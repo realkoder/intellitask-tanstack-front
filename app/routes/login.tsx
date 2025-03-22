@@ -40,10 +40,10 @@ export default function LoginPage() {
 
   const handleSigninApple = async () => {
     try {
-
-      console.log("OKEOfd")
+      console.log('OKEOfd');
       const data = await signIn.social({
         provider: 'apple',
+        callbackURL: 'https://intellitask-tanstack-front.vercel.app/chat',
       });
 
       console.log('SIGINININ', data);
