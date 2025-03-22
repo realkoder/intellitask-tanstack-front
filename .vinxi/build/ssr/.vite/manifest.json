@@ -1,0 +1,59 @@
+{
+  "/Users/alexanderchristensen/Projects/IntelliOptima/code-project/intellitask-tanstack/app/app.css": {
+    "file": "assets/app-Cs9mLtrU.css",
+    "src": "/Users/alexanderchristensen/Projects/IntelliOptima/code-project/intellitask-tanstack/app/app.css"
+  },
+  "/Users/alexanderchristensen/Projects/IntelliOptima/code-project/intellitask-tanstack/app/index.css": {
+    "file": "assets/index-BWUNYehG.css",
+    "src": "/Users/alexanderchristensen/Projects/IntelliOptima/code-project/intellitask-tanstack/app/index.css"
+  },
+  "_ssr-CRwCvMcx.js": {
+    "file": "assets/ssr-CRwCvMcx.js",
+    "name": "ssr",
+    "dynamicImports": [
+      "app/routes/login.tsx?tsr-split=component",
+      "app/routes/_layout.tsx?tsr-split=component",
+      "app/routes/index.tsx?tsr-split=component"
+    ],
+    "assets": [
+      "assets/app-Cs9mLtrU.css",
+      "assets/index-BWUNYehG.css"
+    ]
+  },
+  "app/routes/_layout.tsx?tsr-split=component": {
+    "file": "assets/_layout-C0-Ejm-I.js",
+    "name": "_layout",
+    "src": "app/routes/_layout.tsx?tsr-split=component",
+    "isDynamicEntry": true,
+    "imports": [
+      "_ssr-CRwCvMcx.js"
+    ]
+  },
+  "app/routes/index.tsx?tsr-split=component": {
+    "file": "assets/index-BsurgMbl.js",
+    "name": "index",
+    "src": "app/routes/index.tsx?tsr-split=component",
+    "isDynamicEntry": true,
+    "imports": [
+      "_ssr-CRwCvMcx.js"
+    ]
+  },
+  "app/routes/login.tsx?tsr-split=component": {
+    "file": "assets/login-Ck_xKl4z.js",
+    "name": "login",
+    "src": "app/routes/login.tsx?tsr-split=component",
+    "isDynamicEntry": true,
+    "imports": [
+      "_ssr-CRwCvMcx.js"
+    ]
+  },
+  "virtual:$vinxi/handler/ssr": {
+    "file": "ssr.js",
+    "name": "ssr",
+    "src": "virtual:$vinxi/handler/ssr",
+    "isEntry": true,
+    "imports": [
+      "_ssr-CRwCvMcx.js"
+    ]
+  }
+}
