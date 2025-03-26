@@ -8,7 +8,6 @@ const words = ["Easily", "Securely", "Efficiently", "Cheaply"];
 const Hero = () => {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
-  const flipContainerRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -151,11 +150,11 @@ const Hero = () => {
               transition={{ type: 'spring', stiffness: 400, damping: 10 }}
             >
               <Sparkles className="h-4 w-4 mr-2 text-primary" />
-              <span className="text-sm font-medium text-primary">Simplified AI adoption</span>
+              <span className="text-sm font-medium text-primary">Centralized AI Usage</span>
             </motion.div>
 
             <motion.h1 className="mb-6 text-4xl md:text-6xl lg:text-7xl font-bold" variants={itemVariants}>
-              Access multiple AI models
+              Access all the latest AI models
               <span className="inline-flex ml-2">
                 <div className="perspective-3d overflow-hidden h-[1.2em] mr-2 relative">
                   <AnimatePresence mode="wait">
