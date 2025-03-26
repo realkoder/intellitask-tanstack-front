@@ -8,6 +8,7 @@ import {
 } from '~/components/ui/breadcrumb';
 import { SidebarProvider, SidebarInset, SidebarTrigger } from '~/components/ui/sidebar';
 import { Separator } from '~/components/ui/separator';
+import HeaderBar from '../components/HeaderBar';
 
 export const Route = createFileRoute('/_layout')({
   component: AiChatLayout,
@@ -18,6 +19,7 @@ export default function AiChatLayout() {
     <SidebarProvider>
       <SidebarApp />
       <SidebarInset className="flex flex-col h-screen overflow-y-auto">
+        <HeaderBar />
         <header className="sticky top-0 flex h-14 shrink-0 items-center gap-2 bg-background">
           <div className="flex flex-1 items-center gap-2 px-3">
             <SidebarTrigger />

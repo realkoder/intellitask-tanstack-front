@@ -1,9 +1,14 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Bot, Braces, Users, Sparkles } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Bot, Braces, Users, Sparkles, Calendar } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+
+const words = ["Easily", "Securely", "Efficiently", "Cheaply"];
 
 const Hero = () => {
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const flipContainerRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -27,6 +32,20 @@ const Hero = () => {
     return () => document.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
+
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsAnimating(true);
+      setCurrentWordIndex((prevIndex) => (prevIndex + 1) % words.length);
+      setTimeout(() => {
+        setIsAnimating(false);
+      }, 1000);
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -48,6 +67,36 @@ const Hero = () => {
       },
     },
   };
+
+  // Update your flipVariants with these new animations
+  const flipVariants = {
+    initial: {
+      rotateX: -90,
+      opacity: 0,
+      y: '100%'
+    },
+    enter: {
+      rotateX: 0,
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: "spring",
+        damping: 15,
+        stiffness: 150,
+        duration: 0.5
+      }
+    },
+    exit: {
+      rotateX: 90,
+      opacity: 0,
+      y: '-100%',
+      transition: {
+        duration: 0.4
+      }
+    }
+  };
+
+
 
   return (
     <section
@@ -102,43 +151,53 @@ const Hero = () => {
               transition={{ type: 'spring', stiffness: 400, damping: 10 }}
             >
               <Sparkles className="h-4 w-4 mr-2 text-primary" />
-              <span className="text-sm font-medium text-primary">Redefining AI Collaboration</span>
+              <span className="text-sm font-medium text-primary">Simplified AI adoption</span>
             </motion.div>
 
-            <motion.h1 className="mb-6" variants={itemVariants}>
-              Collaborate with AI
-              <br />
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-400">
-                in Real-time
+            <motion.h1 className="mb-6 text-4xl md:text-6xl lg:text-7xl font-bold" variants={itemVariants}>
+              Access multiple AI models
+              <span className="inline-flex ml-2">
+                <div className="perspective-3d overflow-hidden h-[1.2em] mr-2 relative">
+                  <AnimatePresence mode="wait">
+                    <motion.span
+                      key={words[currentWordIndex]}
+                      className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-400 inline-block pb-2 relative px-2 -mx-2"
+                      variants={flipVariants}
+                      initial="initial"
+                      animate="enter"
+                      exit="exit"
+                      style={{ transformOrigin: "center center" }}
+                    >
+                      {words[currentWordIndex]}
+                    </motion.span>
+                  </AnimatePresence>
+                </div>
               </span>
             </motion.h1>
 
             <motion.p
-              className="text-lg mb-8 text-foreground/80 max-w-xl mx-auto lg:mx-0"
+              className="text-lg mb-8 text-foreground/80 max-w-2xl mx-auto lg:mx-0"
               variants={itemVariants}
             >
-              Connect, create, and collaborate with multiple AI models simultaneously. Our platform
-              brings teams and artificial intelligence together in a seamless workspace.
+              One centralised platform to manage all your AI models, with enterprise-grade security, simple access management, and powerful collaboration features.
             </motion.p>
 
             <motion.div
               className="flex flex-col sm:flex-row justify-center lg:justify-start gap-4"
               variants={itemVariants}
             >
-              <Button size="lg" className="group relative overflow-hidden">
-                <span className="relative z-10">Start for free</span>
-                <span className="absolute inset-0 bg-gradient-to-r from-primary to-blue-400 opacity-0 group-hover:opacity-100 transition-opacity"></span>
-                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1 relative z-10" />
+              <Button size="lg" className="rounded-full flex items-center gap-2 hover:cursor-pointer" onClick={() => window.open('https://calendly.com/intellioptima', '_blank')}>
+                <Calendar size={20} />
+                Schedule a Meeting
               </Button>
-              <Button size="lg" variant="outline" className="group">
-                <span className="bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent opacity-0 group-hover:opacity-100 absolute inset-0 flex items-center justify-center transition-opacity">
-                  Book a demo
-                </span>
-                <span className="group-hover:opacity-0 transition-opacity">Book a demo</span>
-              </Button>
+              <a target='__blank' href='https://intellioptima.com/entry'>
+                <Button size="lg" variant="outline" className="group hover:cursor-pointer">
+                  <span className="">Access Beta</span>
+                </Button>
+              </a>
             </motion.div>
 
-            <motion.div
+            {/* <motion.div
               className="mt-10 flex items-center justify-center lg:justify-start gap-6"
               variants={itemVariants}
             >
@@ -160,7 +219,7 @@ const Hero = () => {
                 <span className="font-semibold text-foreground">1,000+</span> companies already
                 connected
               </div>
-            </motion.div>
+            </motion.div> */}
           </motion.div>
 
           {/* Hero Visual - Animated Interface Mockup */}
@@ -173,7 +232,7 @@ const Hero = () => {
             >
               <div className="glass-card rounded-xl overflow-hidden shadow-lg border border-white/20 relative">
                 {/* Animated Glow Effect */}
-                <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 to-blue-400/10 rounded-xl blur opacity-30 group-hover:opacity-100 transition duration-1000 animate-pulse-slow"></div>
+                <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 to-blue-400/20 rounded-xl blur opacity-30 group-hover:opacity-100 transition duration-1000 animate-pulse-slow"></div>
 
                 {/* Interface Header */}
                 <div className="bg-muted/40 p-4 border-b border-border/50 flex items-center justify-between backdrop-blur-md">
@@ -191,7 +250,7 @@ const Hero = () => {
                       whileHover={{ scale: 1.2 }}
                     ></motion.div>
                   </div>
-                  <div className="text-xs font-medium">AI Collaboration Platform</div>
+                  <div className="text-xs font-medium">IntelliOptima</div>
                   <div className="w-10"></div>
                 </div>
 
@@ -224,7 +283,7 @@ const Hero = () => {
                       <div className="p-1.5 bg-blue-500/20 rounded-md">
                         <Braces size={16} className="text-blue-500" />
                       </div>
-                      <div className="text-xs">Code AI</div>
+                      <div className="text-xs">Sonnet-3.7</div>
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="p-1.5 bg-purple-500/20 rounded-md">
@@ -292,7 +351,7 @@ const Hero = () => {
                           <div className="p-1 bg-blue-500/20 rounded-full">
                             <Braces size={14} className="text-blue-500" />
                           </div>
-                          <div className="text-xs font-medium">Code AI</div>
+                          <div className="text-xs font-medium">Sonnet-3.7</div>
                         </div>
                         <div className="text-[10px] text-foreground/50">Just now</div>
                       </div>

@@ -17,12 +17,15 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Link, useNavigate } from '@tanstack/react-router';
 import { types } from '../../lib/client';
+import { organization, signOut } from '~/lib/getBetterAuthRequestClient';
 
 const HeaderBar = () => {
   const [currentOrg, setCurrentOrg] = useState<types.Organization | null>(null);
   const [organizations, setOrganizations] = useState<types.Organization[]>([]);
   const [userInitial, setUserInitial] = useState('U');
   const navigate = useNavigate();
+
+  const currentOrganization = organization.getFullOrganization();
 
   useEffect(() => {
     // Get current organization
@@ -46,10 +49,10 @@ const HeaderBar = () => {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('isAuthenticated');
-    localStorage.removeItem('currentOrgId');
+    signOut();
     navigate({
-      to: '/chat',
+      to: '/',
+      viewTransition: true,
     });
   };
 

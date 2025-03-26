@@ -6,6 +6,8 @@ import Footer from '../components/Footer';
 import Features from '../components/Features';
 import Testimonials from '../components/Testimonials';
 import CallToAction from '../components/CallToAction';
+import Benefits from '../components/Benefits';
+import About from '../components/About';
 
 export const Route = createFileRoute('/')({
   component: Index,
@@ -44,7 +46,8 @@ function Index() {
       <main className="flex-1">
         <Hero />
         <Features />
-        <Testimonials />
+        <Benefits />
+        <About />
         <CallToAction />
       </main>
       <Footer />

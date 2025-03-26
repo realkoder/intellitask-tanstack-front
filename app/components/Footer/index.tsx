@@ -2,32 +2,15 @@ import { Github, Twitter, Linkedin, Mail } from 'lucide-react';
 
 const footerLinks = [
   {
-    title: 'Product',
     links: [
       { name: 'Features', href: '#features' },
       { name: 'Pricing', href: '#pricing' },
-      { name: 'Testimonials', href: '#testimonials' },
-      { name: 'Roadmap', href: '#' },
+      { name: 'Benefits', href: '#benefits' },
+      { name: 'Contact', href: '#contact' },
     ],
   },
-  {
-    title: 'Resources',
-    links: [
-      { name: 'Documentation', href: '#' },
-      { name: 'API Reference', href: '#' },
-      { name: 'Tutorials', href: '#' },
-      { name: 'Blog', href: '#' },
-    ],
-  },
-  {
-    title: 'Company',
-    links: [
-      { name: 'About', href: '#' },
-      { name: 'Careers', href: '#' },
-      { name: 'Contact', href: '#' },
-      { name: 'Privacy', href: '#' },
-    ],
-  },
+
+
 ];
 
 const Footer = () => {
@@ -78,8 +61,7 @@ const Footer = () => {
 
           {/* Footer Links */}
           {footerLinks.map((group) => (
-            <div key={group.title}>
-              <h3 className="font-semibold mb-4">{group.title}</h3>
+            <div key={group.links[0].name}>
               <ul className="space-y-3">
                 {group.links.map((link) => (
                   <li key={link.name}>
@@ -98,19 +80,8 @@ const Footer = () => {
 
         <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center">
           <p className="text-foreground/60 mb-4 md:mb-0">
-            &copy; {new Date().getFullYear()} AICollaborate. All rights reserved.
+            &copy; {new Date().getFullYear()} IntelliOptima. All rights reserved.
           </p>
-          <div className="flex space-x-6">
-            <a href="#" className="text-foreground/60 hover:text-primary text-sm">
-              Terms of Service
-            </a>
-            <a href="#" className="text-foreground/60 hover:text-primary text-sm">
-              Privacy Policy
-            </a>
-            <a href="#" className="text-foreground/60 hover:text-primary text-sm">
-              Cookies
-            </a>
-          </div>
         </div>
       </div>
     </footer>

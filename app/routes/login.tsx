@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useEffect } from 'react';
 // import { LoginForm } from '../components/login-form';
-import { signUp, signIn, useSession } from '~/lib/getBetterAuthRequestClient';
+import { signUp, signIn, useSession, organization } from '~/lib/getBetterAuthRequestClient';
 
 export const Route = createFileRoute('/login')({
   component: LoginPage,
@@ -27,6 +27,7 @@ export default function LoginPage() {
 
   const handleSignin = async () => {
     try {
+      const member = (await organization.getFullOrganization()).data?.members;
       const response = await signIn.email({
         email: 'test@gmail.com',
         password: 'password123',
@@ -38,23 +39,23 @@ export default function LoginPage() {
     }
   };
 
-  const handleSigninApple = async () => {
-    try {
-      console.log('OKEOfd');
-      const data = await signIn.social({
-        provider: 'apple',
-        callbackURL: 'https://intellitask-tanstack-front.vercel.app/chat',
-      });
+  // const handleSigninApple = async () => {
+  //   try {
+  //     console.log('OKEOfd');
+  //     const data = await signIn.social({
+  //       provider: 'apple',
+  //       callbackURL: 'https://intellitask-tanstack-front.vercel.app/chat',
+  //     });
 
-      console.log('SIGINININ', data);
-    } catch (error) {
-      console.error('Error signing up:', error);
-    }
-  };
+  // //   } catch (error) {
+  // //     console.error('Error signing up:', error);
+  // //   }
+  // // };
 
   const googleSignin = async () => {
-    const data = await signIn.social({
+    await signIn.social({
       provider: 'google',
+      callbackURL: 'http://localhost:3000/chat',
     });
   };
 
@@ -65,7 +66,7 @@ export default function LoginPage() {
         <div>Login here</div>
         <button onClick={() => handleSignUp()}>OPRET MIG</button>
         <button onClick={() => handleSignin()}>LUK MIG IND!!!</button>
-        <button onClick={() => handleSigninApple()}>APPLE NU🍏🍎🍏🍎</button>
+        <button onClick={() => googleSignin()}>GOOGLE SIGNIN</button>
       </div>
     </div>
   );
