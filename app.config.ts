@@ -31,19 +31,10 @@ export default defineConfig({
         projects: ['./tsconfig.json'],
       }),
     ],
-    resolve: {
-      alias: {
-        '~encore': path.resolve(__dirname, './encore.gen'),
-      },
-    },
-
-    optimizeDeps: {
-      include: ['stream'], // Include Node.js built-in modules
-    },
-    build: {
-      rollupOptions: {
-        external: ['node:stream'], // Mark Node.js built-in modules as external
-      },
-    },
+    // resolve: {
+    //   alias: {
+    //     '~encore': path.resolve(__dirname, './encore.gen'),
+    //   },
+    // },
   },
 });
