@@ -1,8 +1,7 @@
-"use client"
-
 import { cn } from "@/lib/utils"
 import { Check } from "lucide-react"
 import { useEffect, useState } from "react"
+import { PaymentPlan } from "../CreateOrg/OrgPayment"
 
 interface Step {
   id: number | string
@@ -13,6 +12,7 @@ interface Step {
 interface ProgressStepsProps {
   steps: Step[]
   currentStep: number
+  paymentPlan?: PaymentPlan;
   onStepClick?: (stepId: number | string) => void
   className?: string
   showLabels?: boolean
@@ -22,6 +22,7 @@ interface ProgressStepsProps {
 export function ProgressSteps({
   steps,
   currentStep,
+  paymentPlan,
   onStepClick,
   className,
   showLabels = true,
@@ -40,6 +41,8 @@ export function ProgressSteps({
     <div className={cn("w-full", className)}>
       <div className="relative flex items-center justify-center w-full">
         {steps.map((step, index) => {
+          if (paymentPlan === "enterprise" && step.id == "3") return;
+
           const isActive = step.id === currentStep
           const isCompleted = step.completed || index < steps.findIndex((s) => s.id === currentStep)
 

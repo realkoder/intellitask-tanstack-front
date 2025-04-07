@@ -1,6 +1,6 @@
 import { Environment, Local } from './client';
 import { createAuthClient } from 'better-auth/react';
-import { organizationClient } from 'better-auth/client/plugins';
+import { emailOTPClient, organizationClient } from 'better-auth/client/plugins';
 import { adminClient } from 'better-auth/client/plugins';
 
 const getBetterAuthRequestClient = () => {
@@ -8,8 +8,19 @@ const getBetterAuthRequestClient = () => {
 
   return createAuthClient({
     baseURL: env,
-    plugins: [organizationClient(), adminClient()],
+    plugins: [organizationClient(), adminClient(), emailOTPClient()],
   });
 };
 
-export const { useSession, signIn, signOut, signUp, organization } = getBetterAuthRequestClient();
+export const {
+  useSession,
+  getSession,
+  signIn,
+  signUp,
+  signOut,
+  emailOtp,
+  verifyEmail,
+  organization,
+  useListOrganizations,
+  useActiveOrganization,
+} = getBetterAuthRequestClient();

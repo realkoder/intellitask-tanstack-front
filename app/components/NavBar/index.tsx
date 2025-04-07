@@ -2,14 +2,10 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Menu, X } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
-import { useSession } from '~/lib/getBetterAuthRequestClient';
 
-const Navbar = () => {
+const Navbar = ({ userId }: { userId: string }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  const authenticated = useSession().data?.session.token !== undefined;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -25,12 +21,6 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  useEffect(() => {
-    setIsAuthenticated(authenticated);
-    return () => {
-      setIsAuthenticated(false);
-    };
-  }, [authenticated]);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -60,9 +50,9 @@ const Navbar = () => {
               Contact
             </a>
 
-            <a target='__blank' href='https://intellioptima.com/entry'>
+            <Link to="/sign-in" viewTransition>
               <Button className="hover:cursor-pointer">Access Beta</Button>
-            </a>
+            </Link>
 
 
           </nav>
@@ -98,9 +88,9 @@ const Navbar = () => {
           </a>
 
 
-          <a target='__blank' href="https://intellioptima.com/entry" onClick={toggleMenu}>
+          <Link to="/sign-in" onClick={toggleMenu}>
             <Button className="w-full">Access Beta</Button>
-          </a>
+          </Link>
         </nav>
       </div>
     </header>

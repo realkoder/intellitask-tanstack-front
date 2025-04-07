@@ -18,11 +18,12 @@ type OrgInfoProps = {
 };
 
 const OrgInfo = ({name, setName, description, setDescription} : OrgInfoProps) => {
+
   return (
     <Card className="w-full max-w-lg">
         <CardHeader className="space-y-1 text-center">
           <CardTitle className="text-2xl font-bold">Create your organization</CardTitle>
-          <CardDescription>Set up a workspace for your team to collaborate</CardDescription>
+          <CardDescription>Set up a teamspace for your team to collaborate</CardDescription>
         </CardHeader>
 
           <CardContent className="space-y-4">
@@ -34,6 +35,7 @@ const OrgInfo = ({name, setName, description, setDescription} : OrgInfoProps) =>
                 id="org-name"
                 placeholder="Acme Inc."
                 value={name}
+                maxLength={50}
                 onChange={(e) => setName(e.target.value)}
                 required
               />
@@ -44,6 +46,7 @@ const OrgInfo = ({name, setName, description, setDescription} : OrgInfoProps) =>
                 id="org-description"
                 placeholder="What does your organization do?"
                 value={description}
+                maxLength={1000}
                 onChange={(e) => setDescription(e.target.value)}
                 rows={3}
               />

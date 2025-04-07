@@ -11,16 +11,31 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as VerifyAccountImport } from './routes/verify-account'
 import { Route as SignUpImport } from './routes/sign-up'
 import { Route as SignInImport } from './routes/sign-in'
-import { Route as LoginImport } from './routes/login'
 import { Route as ForgotPasswordImport } from './routes/forgot-password'
 import { Route as CreateOrganizationImport } from './routes/create-organization'
-import { Route as LayoutImport } from './routes/_layout'
+import { Route as AuthedImport } from './routes/_authed'
 import { Route as IndexImport } from './routes/index'
-import { Route as LayoutChatIndexImport } from './routes/_layout/chat/index'
+import { Route as AuthedLayoutImport } from './routes/_authed/_layout'
+import { Route as AcceptInvitationInvitationIdInvitationEmailImport } from './routes/accept-invitation/$invitationId.$invitationEmail'
+import { Route as AuthedLayoutTeamChatIndexImport } from './routes/_authed/_layout/team-chat/index'
+import { Route as AuthedLayoutOrganizationsIndexImport } from './routes/_authed/_layout/organizations/index'
+import { Route as AuthedLayoutOrganizationSettingsIndexImport } from './routes/_authed/_layout/organization-settings/index'
+import { Route as AuthedLayoutMembersIndexImport } from './routes/_authed/_layout/members/index'
+import { Route as AuthedLayoutChatIndexImport } from './routes/_authed/_layout/chat/index'
+import { Route as AuthedLayoutTeamspaceTeamspaceIdImport } from './routes/_authed/_layout/teamspace/$teamspaceId'
+import { Route as AuthedLayoutProjectProjectIdImport } from './routes/_authed/_layout/project/$projectId'
+import { Route as AuthedLayoutChatChatroomIdImport } from './routes/_authed/_layout/chat/$chatroomId'
 
 // Create/Update Routes
+
+const VerifyAccountRoute = VerifyAccountImport.update({
+  id: '/verify-account',
+  path: '/verify-account',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const SignUpRoute = SignUpImport.update({
   id: '/sign-up',
@@ -31,12 +46,6 @@ const SignUpRoute = SignUpImport.update({
 const SignInRoute = SignInImport.update({
   id: '/sign-in',
   path: '/sign-in',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const LoginRoute = LoginImport.update({
-  id: '/login',
-  path: '/login',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -52,8 +61,8 @@ const CreateOrganizationRoute = CreateOrganizationImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const LayoutRoute = LayoutImport.update({
-  id: '/_layout',
+const AuthedRoute = AuthedImport.update({
+  id: '/_authed',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -63,11 +72,71 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const LayoutChatIndexRoute = LayoutChatIndexImport.update({
+const AuthedLayoutRoute = AuthedLayoutImport.update({
+  id: '/_layout',
+  getParentRoute: () => AuthedRoute,
+} as any)
+
+const AcceptInvitationInvitationIdInvitationEmailRoute =
+  AcceptInvitationInvitationIdInvitationEmailImport.update({
+    id: '/accept-invitation/$invitationId/$invitationEmail',
+    path: '/accept-invitation/$invitationId/$invitationEmail',
+    getParentRoute: () => rootRoute,
+  } as any)
+
+const AuthedLayoutTeamChatIndexRoute = AuthedLayoutTeamChatIndexImport.update({
+  id: '/team-chat/',
+  path: '/team-chat/',
+  getParentRoute: () => AuthedLayoutRoute,
+} as any)
+
+const AuthedLayoutOrganizationsIndexRoute =
+  AuthedLayoutOrganizationsIndexImport.update({
+    id: '/organizations/',
+    path: '/organizations/',
+    getParentRoute: () => AuthedLayoutRoute,
+  } as any)
+
+const AuthedLayoutOrganizationSettingsIndexRoute =
+  AuthedLayoutOrganizationSettingsIndexImport.update({
+    id: '/organization-settings/',
+    path: '/organization-settings/',
+    getParentRoute: () => AuthedLayoutRoute,
+  } as any)
+
+const AuthedLayoutMembersIndexRoute = AuthedLayoutMembersIndexImport.update({
+  id: '/members/',
+  path: '/members/',
+  getParentRoute: () => AuthedLayoutRoute,
+} as any)
+
+const AuthedLayoutChatIndexRoute = AuthedLayoutChatIndexImport.update({
   id: '/chat/',
   path: '/chat/',
-  getParentRoute: () => LayoutRoute,
+  getParentRoute: () => AuthedLayoutRoute,
 } as any)
+
+const AuthedLayoutTeamspaceTeamspaceIdRoute =
+  AuthedLayoutTeamspaceTeamspaceIdImport.update({
+    id: '/teamspace/$teamspaceId',
+    path: '/teamspace/$teamspaceId',
+    getParentRoute: () => AuthedLayoutRoute,
+  } as any)
+
+const AuthedLayoutProjectProjectIdRoute =
+  AuthedLayoutProjectProjectIdImport.update({
+    id: '/project/$projectId',
+    path: '/project/$projectId',
+    getParentRoute: () => AuthedLayoutRoute,
+  } as any)
+
+const AuthedLayoutChatChatroomIdRoute = AuthedLayoutChatChatroomIdImport.update(
+  {
+    id: '/chat/$chatroomId',
+    path: '/chat/$chatroomId',
+    getParentRoute: () => AuthedLayoutRoute,
+  } as any,
+)
 
 // Populate the FileRoutesByPath interface
 
@@ -80,11 +149,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/_layout': {
-      id: '/_layout'
+    '/_authed': {
+      id: '/_authed'
       path: ''
       fullPath: ''
-      preLoaderRoute: typeof LayoutImport
+      preLoaderRoute: typeof AuthedImport
       parentRoute: typeof rootRoute
     }
     '/create-organization': {
@@ -101,13 +170,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ForgotPasswordImport
       parentRoute: typeof rootRoute
     }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginImport
-      parentRoute: typeof rootRoute
-    }
     '/sign-in': {
       id: '/sign-in'
       path: '/sign-in'
@@ -122,61 +184,183 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignUpImport
       parentRoute: typeof rootRoute
     }
-    '/_layout/chat/': {
-      id: '/_layout/chat/'
+    '/verify-account': {
+      id: '/verify-account'
+      path: '/verify-account'
+      fullPath: '/verify-account'
+      preLoaderRoute: typeof VerifyAccountImport
+      parentRoute: typeof rootRoute
+    }
+    '/_authed/_layout': {
+      id: '/_authed/_layout'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthedLayoutImport
+      parentRoute: typeof AuthedImport
+    }
+    '/accept-invitation/$invitationId/$invitationEmail': {
+      id: '/accept-invitation/$invitationId/$invitationEmail'
+      path: '/accept-invitation/$invitationId/$invitationEmail'
+      fullPath: '/accept-invitation/$invitationId/$invitationEmail'
+      preLoaderRoute: typeof AcceptInvitationInvitationIdInvitationEmailImport
+      parentRoute: typeof rootRoute
+    }
+    '/_authed/_layout/chat/$chatroomId': {
+      id: '/_authed/_layout/chat/$chatroomId'
+      path: '/chat/$chatroomId'
+      fullPath: '/chat/$chatroomId'
+      preLoaderRoute: typeof AuthedLayoutChatChatroomIdImport
+      parentRoute: typeof AuthedLayoutImport
+    }
+    '/_authed/_layout/project/$projectId': {
+      id: '/_authed/_layout/project/$projectId'
+      path: '/project/$projectId'
+      fullPath: '/project/$projectId'
+      preLoaderRoute: typeof AuthedLayoutProjectProjectIdImport
+      parentRoute: typeof AuthedLayoutImport
+    }
+    '/_authed/_layout/teamspace/$teamspaceId': {
+      id: '/_authed/_layout/teamspace/$teamspaceId'
+      path: '/teamspace/$teamspaceId'
+      fullPath: '/teamspace/$teamspaceId'
+      preLoaderRoute: typeof AuthedLayoutTeamspaceTeamspaceIdImport
+      parentRoute: typeof AuthedLayoutImport
+    }
+    '/_authed/_layout/chat/': {
+      id: '/_authed/_layout/chat/'
       path: '/chat'
       fullPath: '/chat'
-      preLoaderRoute: typeof LayoutChatIndexImport
-      parentRoute: typeof LayoutImport
+      preLoaderRoute: typeof AuthedLayoutChatIndexImport
+      parentRoute: typeof AuthedLayoutImport
+    }
+    '/_authed/_layout/members/': {
+      id: '/_authed/_layout/members/'
+      path: '/members'
+      fullPath: '/members'
+      preLoaderRoute: typeof AuthedLayoutMembersIndexImport
+      parentRoute: typeof AuthedLayoutImport
+    }
+    '/_authed/_layout/organization-settings/': {
+      id: '/_authed/_layout/organization-settings/'
+      path: '/organization-settings'
+      fullPath: '/organization-settings'
+      preLoaderRoute: typeof AuthedLayoutOrganizationSettingsIndexImport
+      parentRoute: typeof AuthedLayoutImport
+    }
+    '/_authed/_layout/organizations/': {
+      id: '/_authed/_layout/organizations/'
+      path: '/organizations'
+      fullPath: '/organizations'
+      preLoaderRoute: typeof AuthedLayoutOrganizationsIndexImport
+      parentRoute: typeof AuthedLayoutImport
+    }
+    '/_authed/_layout/team-chat/': {
+      id: '/_authed/_layout/team-chat/'
+      path: '/team-chat'
+      fullPath: '/team-chat'
+      preLoaderRoute: typeof AuthedLayoutTeamChatIndexImport
+      parentRoute: typeof AuthedLayoutImport
     }
   }
 }
 
 // Create and export the route tree
 
-interface LayoutRouteChildren {
-  LayoutChatIndexRoute: typeof LayoutChatIndexRoute
+interface AuthedLayoutRouteChildren {
+  AuthedLayoutChatChatroomIdRoute: typeof AuthedLayoutChatChatroomIdRoute
+  AuthedLayoutProjectProjectIdRoute: typeof AuthedLayoutProjectProjectIdRoute
+  AuthedLayoutTeamspaceTeamspaceIdRoute: typeof AuthedLayoutTeamspaceTeamspaceIdRoute
+  AuthedLayoutChatIndexRoute: typeof AuthedLayoutChatIndexRoute
+  AuthedLayoutMembersIndexRoute: typeof AuthedLayoutMembersIndexRoute
+  AuthedLayoutOrganizationSettingsIndexRoute: typeof AuthedLayoutOrganizationSettingsIndexRoute
+  AuthedLayoutOrganizationsIndexRoute: typeof AuthedLayoutOrganizationsIndexRoute
+  AuthedLayoutTeamChatIndexRoute: typeof AuthedLayoutTeamChatIndexRoute
 }
 
-const LayoutRouteChildren: LayoutRouteChildren = {
-  LayoutChatIndexRoute: LayoutChatIndexRoute,
+const AuthedLayoutRouteChildren: AuthedLayoutRouteChildren = {
+  AuthedLayoutChatChatroomIdRoute: AuthedLayoutChatChatroomIdRoute,
+  AuthedLayoutProjectProjectIdRoute: AuthedLayoutProjectProjectIdRoute,
+  AuthedLayoutTeamspaceTeamspaceIdRoute: AuthedLayoutTeamspaceTeamspaceIdRoute,
+  AuthedLayoutChatIndexRoute: AuthedLayoutChatIndexRoute,
+  AuthedLayoutMembersIndexRoute: AuthedLayoutMembersIndexRoute,
+  AuthedLayoutOrganizationSettingsIndexRoute:
+    AuthedLayoutOrganizationSettingsIndexRoute,
+  AuthedLayoutOrganizationsIndexRoute: AuthedLayoutOrganizationsIndexRoute,
+  AuthedLayoutTeamChatIndexRoute: AuthedLayoutTeamChatIndexRoute,
 }
 
-const LayoutRouteWithChildren =
-  LayoutRoute._addFileChildren(LayoutRouteChildren)
+const AuthedLayoutRouteWithChildren = AuthedLayoutRoute._addFileChildren(
+  AuthedLayoutRouteChildren,
+)
+
+interface AuthedRouteChildren {
+  AuthedLayoutRoute: typeof AuthedLayoutRouteWithChildren
+}
+
+const AuthedRouteChildren: AuthedRouteChildren = {
+  AuthedLayoutRoute: AuthedLayoutRouteWithChildren,
+}
+
+const AuthedRouteWithChildren =
+  AuthedRoute._addFileChildren(AuthedRouteChildren)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '': typeof LayoutRouteWithChildren
+  '': typeof AuthedLayoutRouteWithChildren
   '/create-organization': typeof CreateOrganizationRoute
   '/forgot-password': typeof ForgotPasswordRoute
-  '/login': typeof LoginRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
-  '/chat': typeof LayoutChatIndexRoute
+  '/verify-account': typeof VerifyAccountRoute
+  '/accept-invitation/$invitationId/$invitationEmail': typeof AcceptInvitationInvitationIdInvitationEmailRoute
+  '/chat/$chatroomId': typeof AuthedLayoutChatChatroomIdRoute
+  '/project/$projectId': typeof AuthedLayoutProjectProjectIdRoute
+  '/teamspace/$teamspaceId': typeof AuthedLayoutTeamspaceTeamspaceIdRoute
+  '/chat': typeof AuthedLayoutChatIndexRoute
+  '/members': typeof AuthedLayoutMembersIndexRoute
+  '/organization-settings': typeof AuthedLayoutOrganizationSettingsIndexRoute
+  '/organizations': typeof AuthedLayoutOrganizationsIndexRoute
+  '/team-chat': typeof AuthedLayoutTeamChatIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '': typeof LayoutRouteWithChildren
+  '': typeof AuthedLayoutRouteWithChildren
   '/create-organization': typeof CreateOrganizationRoute
   '/forgot-password': typeof ForgotPasswordRoute
-  '/login': typeof LoginRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
-  '/chat': typeof LayoutChatIndexRoute
+  '/verify-account': typeof VerifyAccountRoute
+  '/accept-invitation/$invitationId/$invitationEmail': typeof AcceptInvitationInvitationIdInvitationEmailRoute
+  '/chat/$chatroomId': typeof AuthedLayoutChatChatroomIdRoute
+  '/project/$projectId': typeof AuthedLayoutProjectProjectIdRoute
+  '/teamspace/$teamspaceId': typeof AuthedLayoutTeamspaceTeamspaceIdRoute
+  '/chat': typeof AuthedLayoutChatIndexRoute
+  '/members': typeof AuthedLayoutMembersIndexRoute
+  '/organization-settings': typeof AuthedLayoutOrganizationSettingsIndexRoute
+  '/organizations': typeof AuthedLayoutOrganizationsIndexRoute
+  '/team-chat': typeof AuthedLayoutTeamChatIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/_layout': typeof LayoutRouteWithChildren
+  '/_authed': typeof AuthedRouteWithChildren
   '/create-organization': typeof CreateOrganizationRoute
   '/forgot-password': typeof ForgotPasswordRoute
-  '/login': typeof LoginRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
-  '/_layout/chat/': typeof LayoutChatIndexRoute
+  '/verify-account': typeof VerifyAccountRoute
+  '/_authed/_layout': typeof AuthedLayoutRouteWithChildren
+  '/accept-invitation/$invitationId/$invitationEmail': typeof AcceptInvitationInvitationIdInvitationEmailRoute
+  '/_authed/_layout/chat/$chatroomId': typeof AuthedLayoutChatChatroomIdRoute
+  '/_authed/_layout/project/$projectId': typeof AuthedLayoutProjectProjectIdRoute
+  '/_authed/_layout/teamspace/$teamspaceId': typeof AuthedLayoutTeamspaceTeamspaceIdRoute
+  '/_authed/_layout/chat/': typeof AuthedLayoutChatIndexRoute
+  '/_authed/_layout/members/': typeof AuthedLayoutMembersIndexRoute
+  '/_authed/_layout/organization-settings/': typeof AuthedLayoutOrganizationSettingsIndexRoute
+  '/_authed/_layout/organizations/': typeof AuthedLayoutOrganizationsIndexRoute
+  '/_authed/_layout/team-chat/': typeof AuthedLayoutTeamChatIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -186,51 +370,79 @@ export interface FileRouteTypes {
     | ''
     | '/create-organization'
     | '/forgot-password'
-    | '/login'
     | '/sign-in'
     | '/sign-up'
+    | '/verify-account'
+    | '/accept-invitation/$invitationId/$invitationEmail'
+    | '/chat/$chatroomId'
+    | '/project/$projectId'
+    | '/teamspace/$teamspaceId'
     | '/chat'
+    | '/members'
+    | '/organization-settings'
+    | '/organizations'
+    | '/team-chat'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | ''
     | '/create-organization'
     | '/forgot-password'
-    | '/login'
     | '/sign-in'
     | '/sign-up'
+    | '/verify-account'
+    | '/accept-invitation/$invitationId/$invitationEmail'
+    | '/chat/$chatroomId'
+    | '/project/$projectId'
+    | '/teamspace/$teamspaceId'
     | '/chat'
+    | '/members'
+    | '/organization-settings'
+    | '/organizations'
+    | '/team-chat'
   id:
     | '__root__'
     | '/'
-    | '/_layout'
+    | '/_authed'
     | '/create-organization'
     | '/forgot-password'
-    | '/login'
     | '/sign-in'
     | '/sign-up'
-    | '/_layout/chat/'
+    | '/verify-account'
+    | '/_authed/_layout'
+    | '/accept-invitation/$invitationId/$invitationEmail'
+    | '/_authed/_layout/chat/$chatroomId'
+    | '/_authed/_layout/project/$projectId'
+    | '/_authed/_layout/teamspace/$teamspaceId'
+    | '/_authed/_layout/chat/'
+    | '/_authed/_layout/members/'
+    | '/_authed/_layout/organization-settings/'
+    | '/_authed/_layout/organizations/'
+    | '/_authed/_layout/team-chat/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  LayoutRoute: typeof LayoutRouteWithChildren
+  AuthedRoute: typeof AuthedRouteWithChildren
   CreateOrganizationRoute: typeof CreateOrganizationRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
-  LoginRoute: typeof LoginRoute
   SignInRoute: typeof SignInRoute
   SignUpRoute: typeof SignUpRoute
+  VerifyAccountRoute: typeof VerifyAccountRoute
+  AcceptInvitationInvitationIdInvitationEmailRoute: typeof AcceptInvitationInvitationIdInvitationEmailRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  LayoutRoute: LayoutRouteWithChildren,
+  AuthedRoute: AuthedRouteWithChildren,
   CreateOrganizationRoute: CreateOrganizationRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
-  LoginRoute: LoginRoute,
   SignInRoute: SignInRoute,
   SignUpRoute: SignUpRoute,
+  VerifyAccountRoute: VerifyAccountRoute,
+  AcceptInvitationInvitationIdInvitationEmailRoute:
+    AcceptInvitationInvitationIdInvitationEmailRoute,
 }
 
 export const routeTree = rootRoute
@@ -244,21 +456,22 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/_layout",
+        "/_authed",
         "/create-organization",
         "/forgot-password",
-        "/login",
         "/sign-in",
-        "/sign-up"
+        "/sign-up",
+        "/verify-account",
+        "/accept-invitation/$invitationId/$invitationEmail"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/_layout": {
-      "filePath": "_layout.tsx",
+    "/_authed": {
+      "filePath": "_authed.tsx",
       "children": [
-        "/_layout/chat/"
+        "/_authed/_layout"
       ]
     },
     "/create-organization": {
@@ -267,18 +480,63 @@ export const routeTree = rootRoute
     "/forgot-password": {
       "filePath": "forgot-password.tsx"
     },
-    "/login": {
-      "filePath": "login.tsx"
-    },
     "/sign-in": {
       "filePath": "sign-in.tsx"
     },
     "/sign-up": {
       "filePath": "sign-up.tsx"
     },
-    "/_layout/chat/": {
-      "filePath": "_layout/chat/index.tsx",
-      "parent": "/_layout"
+    "/verify-account": {
+      "filePath": "verify-account.tsx"
+    },
+    "/_authed/_layout": {
+      "filePath": "_authed/_layout.tsx",
+      "parent": "/_authed",
+      "children": [
+        "/_authed/_layout/chat/$chatroomId",
+        "/_authed/_layout/project/$projectId",
+        "/_authed/_layout/teamspace/$teamspaceId",
+        "/_authed/_layout/chat/",
+        "/_authed/_layout/members/",
+        "/_authed/_layout/organization-settings/",
+        "/_authed/_layout/organizations/",
+        "/_authed/_layout/team-chat/"
+      ]
+    },
+    "/accept-invitation/$invitationId/$invitationEmail": {
+      "filePath": "accept-invitation/$invitationId.$invitationEmail.tsx"
+    },
+    "/_authed/_layout/chat/$chatroomId": {
+      "filePath": "_authed/_layout/chat/$chatroomId.tsx",
+      "parent": "/_authed/_layout"
+    },
+    "/_authed/_layout/project/$projectId": {
+      "filePath": "_authed/_layout/project/$projectId.tsx",
+      "parent": "/_authed/_layout"
+    },
+    "/_authed/_layout/teamspace/$teamspaceId": {
+      "filePath": "_authed/_layout/teamspace/$teamspaceId.tsx",
+      "parent": "/_authed/_layout"
+    },
+    "/_authed/_layout/chat/": {
+      "filePath": "_authed/_layout/chat/index.tsx",
+      "parent": "/_authed/_layout"
+    },
+    "/_authed/_layout/members/": {
+      "filePath": "_authed/_layout/members/index.tsx",
+      "parent": "/_authed/_layout"
+    },
+    "/_authed/_layout/organization-settings/": {
+      "filePath": "_authed/_layout/organization-settings/index.tsx",
+      "parent": "/_authed/_layout"
+    },
+    "/_authed/_layout/organizations/": {
+      "filePath": "_authed/_layout/organizations/index.tsx",
+      "parent": "/_authed/_layout"
+    },
+    "/_authed/_layout/team-chat/": {
+      "filePath": "_authed/_layout/team-chat/index.tsx",
+      "parent": "/_authed/_layout"
     }
   }
 }

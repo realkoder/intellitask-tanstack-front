@@ -9,8 +9,6 @@ const footerLinks = [
       { name: 'Contact', href: '#contact' },
     ],
   },
-
-
 ];
 
 const Footer = () => {
@@ -18,7 +16,7 @@ const Footer = () => {
     <footer className="bg-muted/20 border-t border-border">
       <div className="container mx-auto px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-          {/* Company Info */}
+          {/* Organisation Info */}
           <div className="lg:col-span-2">
             <div className="text-2xl font-heading font-bold text-foreground mb-4">
               AICollaborate

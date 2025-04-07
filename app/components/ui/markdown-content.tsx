@@ -7,7 +7,7 @@ import remarkGfm from "remark-gfm";
 import { cn } from "../../lib/utils";
 
 const DEFAULT_PRE_BLOCK_CLASS =
-	"my-4 overflow-x-auto w-fit rounded-xl bg-zinc-950 text-zinc-50 dark:bg-zinc-900 border border-border p-4";
+	"my-4 overflow-x-auto w-fit rounded-xl text-zinc-50 bg-zinc-900 dark:bg-zinc-900 border border-border p-4";
 
 const extractTextContent = (node: React.ReactNode): string => {
 	if (typeof node === "string") {
@@ -44,7 +44,7 @@ const HighlightedPre = memo(
 			lang: language as keyof typeof bundledLanguages,
 			themes: {
 				light: "github-dark",
-				dark: "github-dark",
+				dark: "github-light",
 			},
 		});
 
@@ -56,7 +56,7 @@ const HighlightedPre = memo(
 							key={`line-${
 								// biome-ignore lint/suspicious/noArrayIndexKey: Needed for react key
 								lineIndex
-							}`}
+								}`}
 						>
 							{line.map((token, tokenIndex) => {
 								const style =
@@ -69,7 +69,7 @@ const HighlightedPre = memo(
 										key={`token-${
 											// biome-ignore lint/suspicious/noArrayIndexKey: Needed for react key
 											tokenIndex
-										}`}
+											}`}
 										style={style}
 									>
 										{token.content}
@@ -323,7 +323,7 @@ export const MarkdownContent = memo(
 				key={`${id}-block_${
 					// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 					index
-				}`}
+					}`}
 			/>
 		));
 	},

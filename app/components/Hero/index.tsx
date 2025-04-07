@@ -8,6 +8,7 @@ const words = ["Easily", "Securely", "Efficiently", "Cheaply"];
 const Hero = () => {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const flipContainerRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -150,11 +151,11 @@ const Hero = () => {
               transition={{ type: 'spring', stiffness: 400, damping: 10 }}
             >
               <Sparkles className="h-4 w-4 mr-2 text-primary" />
-              <span className="text-sm font-medium text-primary">Centralized AI Usage</span>
+              <span className="text-sm font-medium text-primary">Simplified AI adoption</span>
             </motion.div>
 
             <motion.h1 className="mb-6 text-4xl md:text-6xl lg:text-7xl font-bold" variants={itemVariants}>
-              Access all the latest AI models
+              Access multiple AI models
               <span className="inline-flex ml-2">
                 <div className="perspective-3d overflow-hidden h-[1.2em] mr-2 relative">
                   <AnimatePresence mode="wait">
@@ -189,7 +190,7 @@ const Hero = () => {
                 <Calendar size={20} />
                 Schedule a Meeting
               </Button>
-              <a target='__blank' href='https://intellioptima.com/entry'>
+              <a href='/entry'>
                 <Button size="lg" variant="outline" className="group hover:cursor-pointer">
                   <span className="">Access Beta</span>
                 </Button>

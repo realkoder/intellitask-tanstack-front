@@ -4,7 +4,6 @@ import Navbar from '../components/NavBar';
 import Hero from '../components/Hero';
 import Footer from '../components/Footer';
 import Features from '../components/Features';
-import Testimonials from '../components/Testimonials';
 import CallToAction from '../components/CallToAction';
 import Benefits from '../components/Benefits';
 import About from '../components/About';
@@ -14,6 +13,7 @@ export const Route = createFileRoute('/')({
 });
 
 function Index() {
+  const { userId } = Route.useRouteContext()
   useEffect(() => {
     // Smooth scroll behavior for anchor links
     const handleAnchorClick = (e: MouseEvent) => {
@@ -42,7 +42,7 @@ function Index() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <Navbar />
+      <Navbar userId={userId} />
       <main className="flex-1">
         <Hero />
         <Features />

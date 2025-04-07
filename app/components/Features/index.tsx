@@ -19,7 +19,7 @@ const features = [
   {
     icon: Users,
     title: 'Real-time Collaboration',
-    description: 'Work together with your team and AIs in the same workspace, instantly.',
+    description: 'Work together with your team and AIs in the same teamspace, instantly.',
   },
   {
     icon: Zap,

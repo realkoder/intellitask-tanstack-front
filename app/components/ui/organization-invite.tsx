@@ -1,39 +1,30 @@
-"use client"
-
 import { useState } from "react"
-import { Mail, X, UserPlus, Check } from "lucide-react"
+import { Mail, X, UserPlus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
+import { useSession } from "@/lib/getBetterAuthRequestClient"
+import { OrganizationInvitee, OrganizationRole } from "../../../types/better-auth.types"
 
-export type InviteeRole = "Admin" | "Member" | "Developer" | "Viewer"
-
-export interface Invitee {
-  email: string
-  role: InviteeRole
-  id: string
-}
-
-interface OrganizationInviteProps {
-  invitees: Invitee[]
-  onAddInvitee: (email: string, role: InviteeRole) => void
-  onRemoveInvitee: (id: string) => void
-  onSubmit: () => Promise<void>
-  isSubmitting?: boolean
+export interface OrganizationInviteProps {
+  invitees: OrganizationInvitee[];
+  onAddInvitee: (email: string, role: OrganizationRole) => void;
+  onRemoveInvitee: (id: string) => void;
+  isSubmitting?: boolean;
 }
 
 export default function OrganizationInvite({
   invitees,
   onAddInvitee,
   onRemoveInvitee,
-  onSubmit,
   isSubmitting = false,
 }: OrganizationInviteProps) {
+  const { data: sessionData } = useSession();
   const [email, setEmail] = useState("")
-  const [role, setRole] = useState<InviteeRole>("Member")
+  const [role, setRole] = useState<OrganizationRole>("member")
   const [emailError, setEmailError] = useState("")
 
   const validateEmail = (email: string) => {
@@ -42,6 +33,11 @@ export default function OrganizationInvite({
   }
 
   const handleAddInvitee = () => {
+    if (email.toLowerCase() === sessionData?.user.email.toLowerCase()) {
+      setEmailError("Not allowed to use your own email here");
+      return;
+    }
+
     if (!email) {
       setEmailError("Email is required")
       return
@@ -53,7 +49,7 @@ export default function OrganizationInvite({
     }
 
     // Check if email already exists in the list
-    if (invitees.some((invitee) => invitee.email === email)) {
+    if (invitees.some((invitee) => invitee.email.toLowerCase() === email.toLowerCase())) {
       setEmailError("This email has already been added")
       return
     }
@@ -63,16 +59,14 @@ export default function OrganizationInvite({
     setEmail("")
   }
 
-  const getRoleBadgeColor = (role: InviteeRole) => {
+  const getRoleBadgeColor = (role: OrganizationRole) => {
     switch (role) {
-      case "Admin":
+      case "admin":
         return "bg-red-100 text-red-800 hover:bg-red-200"
-      case "Member":
+      case "member":
         return "bg-blue-100 text-blue-800 hover:bg-blue-200"
-      case "Developer":
+      case "owner":
         return "bg-green-100 text-green-800 hover:bg-green-200"
-      case "Viewer":
-        return "bg-gray-100 text-gray-800 hover:bg-gray-200"
       default:
         return "bg-gray-100 text-gray-800 hover:bg-gray-200"
     }
@@ -96,20 +90,19 @@ export default function OrganizationInvite({
                   type="email"
                   placeholder="colleague@example.com"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => setEmail(e.target.value.toLowerCase())}
                   className={emailError ? "border-red-500" : ""}
                 />
                 {emailError && <p className="text-sm text-red-500 mt-1">{emailError}</p>}
               </div>
-              <Select value={role} onValueChange={(value) => setRole(value as InviteeRole)}>
+              <Select value={role} onValueChange={(value) => setRole(value as OrganizationRole)}>
                 <SelectTrigger className="w-[180px] hover:cursor-pointer">
                   <SelectValue placeholder="Select role" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem className="hover:cursor-pointer" value="Admin">Admin</SelectItem>
-                  <SelectItem className="hover:cursor-pointer" value="Member">Member</SelectItem>
-                  <SelectItem className="hover:cursor-pointer" value="Developer">Developer</SelectItem>
-                  <SelectItem className="hover:cursor-pointer" value="Viewer">Viewer</SelectItem>
+                  <SelectItem className="hover:cursor-pointer" value="owner">Owner</SelectItem>
+                  <SelectItem className="hover:cursor-pointer" value="admin">Admin</SelectItem>
+                  <SelectItem className="hover:cursor-pointer" value="member">Member</SelectItem>
                 </SelectContent>
               </Select>
               <Button className="hover:cursor-pointer" type="button" onClick={handleAddInvitee}>
@@ -120,6 +113,8 @@ export default function OrganizationInvite({
           </div>
         </div>
 
+      </CardContent>
+      <CardFooter className="flex justify-center border-t p-6">
         {invitees.length > 0 && (
           <div className="space-y-3">
             <h3 className="text-sm font-medium">Pending Invitations</h3>
@@ -140,19 +135,7 @@ export default function OrganizationInvite({
             </div>
           </div>
         )}
-      </CardContent>
-      <CardFooter className="flex justify-center border-t p-6">
-
-        <Button onClick={onSubmit} disabled={invitees.length === 0 || isSubmitting} className="gap-2 hover:cursor-pointer">
-          {isSubmitting ? (
-            <>Processing...</>
-          ) : (
-            <>
-              <Check className="h-4 w-4" />
-              Send Invitations
-            </>
-          )}
-        </Button>
+        {invitees.length === 0 && <p>No members selected for the organization</p>}
       </CardFooter>
     </Card>
   )

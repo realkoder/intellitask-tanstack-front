@@ -1,6 +1,3 @@
-"use client"
-
-import { useState } from "react"
 import { Check, Users, Building, BuildingIcon as BuildingSkyscraper } from "lucide-react"
 import { cn } from "@/lib/utils"
 

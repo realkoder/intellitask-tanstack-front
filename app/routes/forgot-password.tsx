@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/forgot-password')({
   component: ForgotPassword,
@@ -19,25 +19,34 @@ import {
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { Mail, ArrowLeft } from 'lucide-react';
+import { emailOtp } from '~/lib/getBetterAuthRequestClient';
+import { InputOTP, InputOTPGroup, InputOTPSlot } from '../components/ui/input-otp';
 
 function ForgotPassword() {
   const [email, setEmail] = useState('');
+  const [otp, setOtp] = useState('');
+  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
+  const [isOtpGenerated, setIsOtpGenerated] = useState(false);
+  const isInputsValid = otp.length === 6 && /^\d{6}$/.test(otp) && email.length > 3 && password.length > 7;
+  const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleRequestResetOtpSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      // In a real app, this would call a password reset API
-      console.log('Password reset requested for:', email);
 
-      // Simulate API call
-      setTimeout(() => {
-        setIsSuccess(true);
-        toast.success('Password reset link sent! Please check your email.');
-      }, 1000);
+      const { data, error } = await emailOtp.sendVerificationOtp({
+        email,
+        type: "forget-password"
+      });
+
+      if (data?.success) {
+        setIsOtpGenerated(true);
+        toast.success('Password reset token sent! Please check your email.');
+      }
+
     } catch (error) {
       toast.error('Failed to send reset link. Please try again.');
       console.error('Password reset error:', error);
@@ -46,20 +55,40 @@ function ForgotPassword() {
     }
   };
 
+  const handleResetPassword = async () => {
+    setIsLoading(true);
+    const { data, error } = await emailOtp.resetPassword({
+      email,
+      otp,
+      password
+    });
+
+    setIsLoading(false);
+    if (data?.success) {
+      navigate({
+        to: '/sign-in',
+        viewTransition: true,
+      });
+    } else {
+      console.error("Error resetting password", error);
+      toast.error("Something went wrong");
+    };
+  }
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-background to-muted/30 p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1 text-center">
           <CardTitle className="text-2xl font-bold">Reset your password</CardTitle>
           <CardDescription>
-            {!isSuccess
+            {!isOtpGenerated
               ? "Enter your email and we'll send you a link to reset your password"
               : 'Check your email for a link to reset your password'}
           </CardDescription>
         </CardHeader>
 
-        {!isSuccess ? (
-          <form onSubmit={handleSubmit}>
+        {!isOtpGenerated ? (
+          <form onSubmit={handleRequestResetOtpSubmit}>
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
@@ -70,7 +99,7 @@ function ForgotPassword() {
                     type="email"
                     placeholder="your.email@example.com"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => setEmail(e.target.value.toLowerCase())}
                     className="pl-10"
                     required
                   />
@@ -93,20 +122,57 @@ function ForgotPassword() {
             </CardFooter>
           </form>
         ) : (
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-6 flex flex-col items-center">
             <div className="rounded-lg bg-muted p-6 text-center">
               <Mail className="mx-auto mb-4 h-12 w-12 text-primary" />
               <p className="text-sm text-muted-foreground">
-                We've sent a password reset link to <strong>{email}</strong>. Please check your
-                inbox and follow the instructions to reset your password.
+                We've sent a password reset token to <strong>{email}</strong>. Please check your
+                inbox and get the token to reset your password.
               </p>
             </div>
+
+            <CardDescription>Please enter the 6-character code sent to your email</CardDescription>
+            <div className="space-y-2">
+              <InputOTP maxLength={6} value={otp} onChange={(value) => setOtp(value)}>
+                <InputOTPGroup>
+                  <InputOTPSlot index={0} />
+                  <InputOTPSlot index={1} />
+                  <InputOTPSlot index={2} />
+                  <InputOTPSlot index={3} />
+                  <InputOTPSlot index={4} />
+                  <InputOTPSlot index={5} />
+                </InputOTPGroup>
+              </InputOTP>
+            </div>
+
+            <div className="space-y-2">
+              <CardTitle>New password</CardTitle>
+              <Input
+                id="password"
+                type="password"
+                minLength={8}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <CardDescription>Password must be at least 8 characters long</CardDescription>
+            </div>
+
+            <Button
+              className="w-full"
+              disabled={!isInputsValid || isLoading}
+              onClick={() => handleResetPassword()}
+            >
+              Reset password
+            </Button>
+
             <Button
               variant="outline"
               className="w-full"
               onClick={() => {
-                setIsSuccess(false);
+                setIsOtpGenerated(false);
                 setEmail('');
+                setPassword('');
               }}
             >
               Try another email

@@ -1,5 +1,5 @@
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
-import { useState } from 'react';
+import { createFileRoute, Link, redirect, useNavigate } from '@tanstack/react-router';
+import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -16,8 +16,14 @@ import { toast } from 'sonner';
 import { signIn } from '~/lib/getBetterAuthRequestClient';
 import { cn } from '../lib/utils';
 
+
 export const Route = createFileRoute('/sign-in')({
-  component: SignIn,
+  beforeLoad({ context }) {
+    if (context.user) {
+      throw redirect({ to: '/chat' })
+    }
+  },
+  component: SignIn
 });
 
 function SignIn() {
@@ -26,26 +32,57 @@ function SignIn() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedEmail = localStorage.getItem("invitationEmail");
+      if (storedEmail) {
+        setEmail(storedEmail);
+        localStorage.removeItem("invitationEmail");
+      }
+    }
+  }, []);
+
+  const handleGoogleSignin = async () => {
+    await signIn.social({
+      provider: 'google',
+      callbackURL: 'http://localhost:3000/chat',
+    });
+  }
+
+  const handleEmailSignin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      // In a real app, this would call an authentication API
-      console.log('Signing in with:', email, password);
+      const { data, error } = await signIn.email({
+        email,
+        password,
+        rememberMe: true
+      });
 
-      // Simulate successful login for demo
-      setTimeout(() => {
-        localStorage.setItem('isAuthenticated', 'true');
+      if (data) {
         toast.success('Successfully signed in!');
         navigate({
           to: '/chat',
+          reloadDocument: true,
           viewTransition: true,
         });
-      }, 1000);
+      } else {
+        if (error.status === 403) {
+          toast.error('You need to verify your account!');
+          setTimeout(() => {
+            navigate({
+              to: `/verify-account?email=${email}`,
+              reloadDocument: true,
+              viewTransition: true,
+            });
+          }, 1000);
+        } else {
+          toast.error("We could not sign you in - check your credentials");
+        }
+      }
     } catch (error) {
       toast.error('Failed to sign in. Please check your credentials.');
-      console.error('Login error:', error);
     } finally {
       setIsLoading(false);
     }
@@ -58,7 +95,7 @@ function SignIn() {
           <CardTitle className="text-2xl font-bold">Sign in</CardTitle>
           <CardDescription>Enter your email and password to access your account</CardDescription>
         </CardHeader>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleEmailSignin}>
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
@@ -67,7 +104,7 @@ function SignIn() {
                 type="email"
                 placeholder="your.email@example.com"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value.toLowerCase())}
                 required
               />
             </div>
@@ -92,16 +129,10 @@ function SignIn() {
             </div>
             <div className={cn('w-full gap-2 flex items-center', 'justify-between flex-col')}>
               <Button
+                type='button'
                 variant="outline"
                 className={cn('w-full gap-2 hover:cursor-pointer')}
-                onClick={async (e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  await signIn.social({
-                    provider: 'google',
-                    callbackURL: 'http://localhost:3000/chat',
-                  });
-                }}
+                onClick={async (e) => handleGoogleSignin()}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

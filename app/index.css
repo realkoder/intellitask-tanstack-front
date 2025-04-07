@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Montserrat:wght@300;400;500;600;700;800&display=swap');
 @import 'tailwindcss';
-
-@plugin "tailwindcss-animate";
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -61,6 +60,8 @@
   --animate-exit: fade-out 0.5s ease-out, scale-out 0.3s ease-out;
   --animate-float: float 6s ease-in-out infinite;
   --animate-pulse-slow: pulse-slow 3s ease-in-out infinite;
+  --animate-shimmer: shimmer 2s infinite;
+  --caret-blink: caret-blink 1.25s ease-out infinite;
 
   @keyframes accordion-down {
     from {
@@ -68,6 +69,17 @@
     }
     to {
       height: var(--radix-accordion-content-height);
+    }
+  }
+  @keyframes caret-blink {
+    0%,
+    70%,
+    100% {
+      opacity: 1;
+    }
+    20%,
+    50% {
+      opacity: 0;
     }
   }
   @keyframes accordion-up {
@@ -150,6 +162,14 @@
     }
     50% {
       opacity: 0.8;
+    }
+  }
+  @keyframes shimmer {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
     }
   }
 }

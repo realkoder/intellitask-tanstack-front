@@ -1,4 +1,3 @@
-// app/routes/__root.tsx
 import type { ReactNode } from "react";
 import {
   Outlet,
@@ -6,22 +5,49 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+import { Provider as JotaiProvider } from "jotai";
 
 import appCss from "~/app.css?url";
 import indexCss from "~/index.css?url";
 import { DefaultCatchBoundary } from "../components/DefaultCatchBoundary";
 import { NotFound } from "../components/NotFound";
-
+import { getWebRequest } from "@tanstack/react-start/server";
+import { createServerFn } from "@tanstack/react-start";
+import { Environment, Local } from "../lib/client";
+import { types } from "../lib/client";
+import { Toaster } from "sonner";
 import { inject } from "@vercel/analytics";
 
-// const fetchClerkAuth = createServerFn({ method: 'GET' }).handler(async () => {
-//   const { userId } = await getAuth(getWebRequest()!);
+export const fetchBetterAuth = createServerFn({ method: "GET" }).handler(
+  async () => {
+    const env = import.meta.env.DEV ? Local : Environment("staging");
+    const headers = getWebRequest()!.headers;
+    try {
+      const response = await fetch(env + "/api/authorize", {
+        method: "GET",
+        headers,
+        credentials: "include",
+      });
 
-//   return {
-//     userId,
-//   };
-// });
+      if (!response.ok) {
+        return {
+          data: null,
+        };
+      }
+
+      const data = await response.json();
+
+      return {
+        data,
+      };
+    } catch (error) {
+      console.error("Auth error:", error);
+      return {
+        data: null,
+      };
+    }
+  }
+);
 
 export const Route = createRootRoute({
   head: () => ({
@@ -34,7 +60,7 @@ export const Route = createRootRoute({
         content: "width=device-width, initial-scale=1",
       },
       {
-        title: "IntelliOptima",
+        title: "IntelliOptima | Chat",
       },
     ],
     links: [
@@ -52,13 +78,24 @@ export const Route = createRootRoute({
       { rel: "stylesheet", href: indexCss },
     ],
   }),
-  // beforeLoad: async () => {
-  //   const { userId } = await fetchClerkAuth();
 
-  //   return {
-  //     userId,
-  //   };
-  // },
+  beforeLoad: async ({}) => {
+    const { data } = await fetchBetterAuth();
+
+    if (!data || !data.user || !data.session) {
+      return {
+        userId: undefined,
+        user: undefined,
+        session: undefined,
+      };
+    }
+
+    return {
+      userId: data.userID,
+      user: data.user as types.UserDto,
+      session: data.session as types.CustomSession,
+    };
+  },
 
   errorComponent: (props) => {
     return (
@@ -74,7 +111,10 @@ export const Route = createRootRoute({
 function RootComponent() {
   return (
     <RootDocument>
-      <Outlet />
+      <JotaiProvider>
+        <Toaster />
+        <Outlet />
+      </JotaiProvider>
     </RootDocument>
   );
 }
@@ -89,7 +129,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
       </head>
       <body>
         {children}
-        <TanStackRouterDevtools position="bottom-right" />
+        {/* <TanStackRouterDevtools position="bottom-right" /> */}
         <Scripts />
       </body>
     </html>

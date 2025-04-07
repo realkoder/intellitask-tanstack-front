@@ -1,5 +1,5 @@
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
-import { useState } from 'react';
+import { createFileRoute, Link, redirect, useNavigate } from '@tanstack/react-router';
+import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -13,10 +13,16 @@ import {
 } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
-import { cn } from '../lib/utils';
-import { signIn, useSession } from '~/lib/getBetterAuthRequestClient';
+import { cn } from '~/lib/utils';
+import { signIn, emailOtp, signUp } from '~/lib/getBetterAuthRequestClient';
+import Seperator from '../components/Seperator';
 
 export const Route = createFileRoute('/sign-up')({
+  beforeLoad({ context }) {
+    if (context.user) {
+      throw redirect({ to: '/chat' })
+    }
+  },
   component: SignUp,
 });
 
@@ -27,27 +33,51 @@ function SignUp() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedEmail = localStorage.getItem("invitationEmail");
+      if (storedEmail) {
+        setEmail(storedEmail);
+        localStorage.removeItem("invitationEmail");
+      }
+    }
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      // In a real app, this would call an authentication API
-      console.log('Signing up with:', name, email, password);
+      const { data: signupData } = await signUp.email({
+        email,
+        name,
+        password
+      });
 
-      // Simulate successful registration for demo
-      setTimeout(() => {
-        localStorage.setItem('isAuthenticated', 'true');
-        localStorage.setItem('userName', name);
-        toast.success('Account created successfully!');
-        navigate({
-          to: '/create-organization',
-          viewTransition: true,
+      if (signupData) {
+        const { data: emailVerificationData } = await emailOtp.sendVerificationOtp({
+          email,
+          type: "email-verification"
         });
-      }, 1000);
+
+        if (emailVerificationData?.success) {
+          toast.success('Account created successfully!');
+          setTimeout(() => {
+            navigate({
+              to: `/verify-account?email=${email}`,
+              viewTransition: true,
+              reloadDocument: true
+            });
+          }, 1000);
+        } else {
+          toast.error('Account not created - try again');
+        }
+      } else {
+        toast.error('Failed to create account. Please try again or check your credentials.');
+      }
+
     } catch (error) {
       toast.error('Failed to create account. Please try again.');
-      console.error('Signup error:', error);
     } finally {
       setIsLoading(false);
     }
@@ -62,47 +92,12 @@ function SignUp() {
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Full Name</Label>
-              <Input
-                id="name"
-                placeholder="John Doe"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="your.email@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-              <p className="text-xs text-muted-foreground">
-                Password must be at least 8 characters long
-              </p>
-            </div>
             <div className={cn('w-full gap-2 flex items-center', 'justify-between flex-col')}>
               <Button
+                type='button'
                 variant="outline"
                 className={cn('w-full gap-2 hover:cursor-pointer')}
                 onClick={async (e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
                   const { data, error } = await signIn.social({
                     provider: 'google',
                     callbackURL: 'http://localhost:3000/create-organization',
@@ -137,9 +132,47 @@ function SignUp() {
                 Sign up with Google
               </Button>
             </div>
+            <Seperator className='w-[90%]' />
+            <div className="space-y-2">
+              <Label htmlFor="name">Full Name</Label>
+              <Input
+                id="name"
+                placeholder="John Doe"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </div>
+
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="your.email@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                minLength={8}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <p className="text-xs text-muted-foreground">
+                Password must be at least 8 characters long
+              </p>
+            </div>
+
           </CardContent>
+          <Seperator className='mb-3 w-[80%]' />
           <CardFooter className="flex flex-col space-y-4">
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button type="submit" className="w-full" disabled={isLoading || name.length === 0 || email.length < 3 || password.length < 7}>
               {isLoading ? 'Creating account...' : 'Create account'}
             </Button>
             <div className="text-center text-sm">

@@ -1,16 +1,17 @@
 import { useState } from "react";
-import OrganizationInvite, { Invitee, InviteeRole } from "../../ui/organization-invite";
+import OrganizationInvite from "../../ui/organization-invite";
+import { OrganizationInvitee, OrganizationRole } from "../../../../types/better-auth.types";
 
 type OrgInviteProps = {
-  invitees: Invitee[]
-  setInvitees: (invitees: Invitee[]) => void
+  invitees: OrganizationInvitee[]
+  setInvitees: (invitees: OrganizationInvitee[]) => void
 }
 
 const OrgInvite = ({ invitees, setInvitees }: OrgInviteProps) => {
 
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleAddInvitee = (email: string, role: InviteeRole) => {
+  const handleAddInvitee = (email: string, role: OrganizationRole) => {
     setInvitees([
       ...invitees,
       {
@@ -25,33 +26,12 @@ const OrgInvite = ({ invitees, setInvitees }: OrgInviteProps) => {
     setInvitees(invitees.filter((invitee) => invitee.id !== id))
   }
 
-  const handleSubmit = async () => {
-    setIsSubmitting(true)
-
-    try {
-     
-
-      // Make API Call to invite users
-
-
-      // Clear the list after successful submission
-      setInvitees([])
-      alert("Invitations sent successfully!")
-    } catch (error) {
-      console.error("Error sending invitations:", error)
-      alert("Failed to send invitations. Please try again.")
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
-
   return (
     <div>
       <OrganizationInvite
         invitees={invitees}
         onAddInvitee={handleAddInvitee}
         onRemoveInvitee={handleRemoveInvitee}
-        onSubmit={handleSubmit}
         isSubmitting={isSubmitting}
       />
     </div>
