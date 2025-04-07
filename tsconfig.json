@@ -13,7 +13,10 @@
       "@/*": ["./server/*"],
       "@/lib/*": ["./app/lib/*"],
       "@/components/*": ["./app/components/*"],
-      "@/components/ui/*": ["./app/components/ui/*"]
+      "@/components/ui/*": ["./app/components/ui/*"],
+      "@/assets/*": ["./app/assets/*"],
+      "@/hooks/*": ["./app/hooks/*"],
+      "@/types/*": ["./types/*"]
     },
 
     // Bundler mode

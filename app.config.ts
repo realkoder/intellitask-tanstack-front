@@ -35,7 +35,6 @@ export default defineConfig({
     resolve: {
       alias: {
         '~encore': path.resolve(__dirname, './encore.gen'),
-        '@': path.resolve(__dirname, 'src'), // Adjust this path if necessary
       },
     },
   },
