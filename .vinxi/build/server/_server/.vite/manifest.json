@@ -1,8 +1,91 @@
 {
+  "_client-BOYEY5wa.js": {
+    "file": "assets/client-BOYEY5wa.js",
+    "name": "client"
+  },
+  "_getRequestClient-BlbUj71l.js": {
+    "file": "assets/getRequestClient-BlbUj71l.js",
+    "name": "getRequestClient",
+    "imports": [
+      "_client-BOYEY5wa.js"
+    ]
+  },
+  "_index-eGnkU4Qz.js": {
+    "file": "assets/index-eGnkU4Qz.js",
+    "name": "index"
+  },
+  "app/assets/img/IntelliOptima-Black-Text-Logo.webp": {
+    "file": "assets/IntelliOptima-Black-Text-Logo-z-6OsVSl.webp",
+    "src": "app/assets/img/IntelliOptima-Black-Text-Logo.webp"
+  },
+  "app/routes/__root.tsx?tsr-directive-use-server=": {
+    "file": "assets/__root-qUR5Qwru.js",
+    "name": "__root",
+    "src": "app/routes/__root.tsx?tsr-directive-use-server=",
+    "isDynamicEntry": true,
+    "imports": [
+      "_client-BOYEY5wa.js"
+    ]
+  },
+  "app/routes/_authed.tsx?tsr-directive-use-server=": {
+    "file": "assets/_authed-B7p2NkLP.js",
+    "name": "_authed",
+    "src": "app/routes/_authed.tsx?tsr-directive-use-server=",
+    "isDynamicEntry": true,
+    "imports": [
+      "_getRequestClient-BlbUj71l.js",
+      "_client-BOYEY5wa.js"
+    ]
+  },
+  "app/routes/_authed/_layout.tsx?tsr-directive-use-server=": {
+    "file": "assets/_layout-upKjyzAj.js",
+    "name": "_layout",
+    "src": "app/routes/_authed/_layout.tsx?tsr-directive-use-server=",
+    "isDynamicEntry": true,
+    "imports": [
+      "_getRequestClient-BlbUj71l.js",
+      "_client-BOYEY5wa.js"
+    ],
+    "dynamicImports": [
+      "app/routes/_authed/_layout.tsx?tsr-split=component"
+    ]
+  },
+  "app/routes/_authed/_layout.tsx?tsr-split=component": {
+    "file": "assets/_layout-DqotXblt.js",
+    "name": "_layout",
+    "src": "app/routes/_authed/_layout.tsx?tsr-split=component",
+    "isDynamicEntry": true,
+    "imports": [
+      "_index-eGnkU4Qz.js",
+      "_getRequestClient-BlbUj71l.js",
+      "_client-BOYEY5wa.js"
+    ],
+    "assets": [
+      "assets/IntelliOptima-Black-Text-Logo-z-6OsVSl.webp"
+    ]
+  },
+  "app/routes/_authed/_layout/chat/$chatroomId.tsx?tsr-directive-use-server=": {
+    "file": "assets/_chatroomId-BjOdpLhQ.js",
+    "name": "_chatroomId",
+    "src": "app/routes/_authed/_layout/chat/$chatroomId.tsx?tsr-directive-use-server=",
+    "isDynamicEntry": true,
+    "imports": [
+      "_index-eGnkU4Qz.js",
+      "_getRequestClient-BlbUj71l.js",
+      "_client-BOYEY5wa.js"
+    ]
+  },
   "virtual:$vinxi/handler/server": {
     "file": "server.js",
     "name": "server",
     "src": "virtual:$vinxi/handler/server",
-    "isEntry": true
+    "isEntry": true,
+    "dynamicImports": [
+      "app/routes/__root.tsx?tsr-directive-use-server=",
+      "app/routes/_authed.tsx?tsr-directive-use-server=",
+      "app/routes/_authed/_layout.tsx?tsr-directive-use-server=",
+      "app/routes/_authed/_layout.tsx?tsr-directive-use-server=",
+      "app/routes/_authed/_layout/chat/$chatroomId.tsx?tsr-directive-use-server="
+    ]
   }
 }

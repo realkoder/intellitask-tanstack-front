@@ -31,10 +31,18 @@ export default defineConfig({
         projects: ['./tsconfig.json'],
       }),
     ],
-    // resolve: {
-    //   alias: {
-    //     '~encore': path.resolve(__dirname, './encore.gen'),
-    //   },
-    // },
+    resolve: {
+      alias: {
+        '~encore': path.resolve(__dirname, './encore.gen'),
+      },
+    },
+    optimizeDeps: {
+      include: ['stream', 'stream/web', 'path', 'fs', 'async_hooks'], // Include Node.js built-in modules
+    },
+    build: {
+      rollupOptions: {
+        external: ['node:stream', 'node:stream/web', 'node:path', 'node:fs', 'node:async_hooks'], // Mark Node.js built-in modules as external
+      },
+    },
   },
 });
