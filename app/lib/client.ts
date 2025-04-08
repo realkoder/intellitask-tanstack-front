@@ -17,7 +17,7 @@ export const Local: BaseURL = "http://localhost:4000"
  */
 export function Environment(name: string): BaseURL {
     // return `https://${name}-intellitask-yrr2.encr.app`
-    return `https://intellitask.io/api`
+    return "https://intellitask.io"
 }
 
 /**
