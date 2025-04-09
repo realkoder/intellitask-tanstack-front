@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Bot, Braces, Users, Sparkles, Calendar } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 
-const words = ["Easily", "Securely", "Efficiently", "Cheaply"];
+const words = ["Easily", "Securely", "Efficiently", "Affordably"];
 
 const Hero = () => {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
@@ -155,7 +155,7 @@ const Hero = () => {
             </motion.div>
 
             <motion.h1 className="mb-6 text-4xl md:text-6xl lg:text-7xl font-bold" variants={itemVariants}>
-              Access multiple AI models
+              Access latest AI models
               <span className="inline-flex ml-2">
                 <div className="perspective-3d overflow-hidden h-[1.2em] mr-2 relative">
                   <AnimatePresence mode="wait">
@@ -190,7 +190,7 @@ const Hero = () => {
                 <Calendar size={20} />
                 Schedule a Meeting
               </Button>
-              <a href='/entry'>
+              <a href='https://intellioptima.com/entry'>
                 <Button size="lg" variant="outline" className="group hover:cursor-pointer">
                   <span className="">Access Beta</span>
                 </Button>

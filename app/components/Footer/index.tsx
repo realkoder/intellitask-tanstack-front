@@ -19,7 +19,7 @@ const Footer = () => {
           {/* Organisation Info */}
           <div className="lg:col-span-2">
             <div className="text-2xl font-heading font-bold text-foreground mb-4">
-              AICollaborate
+              IntelliOptima
             </div>
             <p className="text-foreground/70 mb-6 max-w-md">
               The leading platform for real-time collaboration between teams and AI models.

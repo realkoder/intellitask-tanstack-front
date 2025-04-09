@@ -16,7 +16,6 @@ import { createServerFn } from "@tanstack/react-start";
 import { Environment, Local } from "../lib/client";
 import { types } from "../lib/client";
 import { Toaster } from "sonner";
-import { inject } from "@vercel/analytics";
 
 export const fetchBetterAuth = createServerFn({ method: "GET" }).handler(
   async () => {
@@ -120,7 +119,6 @@ function RootComponent() {
 }
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
-  inject();
   
   return (
     <html>
