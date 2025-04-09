@@ -17,7 +17,7 @@ declare module '@tanstack/react-start/config' {
 }
 
 const vite: InlineConfig = {
-  base: '/',
+  // base: '/',
   server: {
     allowedHosts: ['localhost', '127.0.0.1', 'encore.test', 'staging-intellitask-yrr2.encr.app'],
   },
@@ -47,7 +47,8 @@ export default defineConfig({
     appDirectory: 'app',
   },
   // server: {
-  //   preset: "bun"
+  //   // preset: "bun"
+  //   preset: "node-server"
   // },
   vite,
 });

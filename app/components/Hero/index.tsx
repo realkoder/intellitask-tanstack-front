@@ -190,8 +190,9 @@ const Hero = () => {
                 <Calendar size={20} />
                 Schedule a Meeting
               </Button>
-              <a href='https://intellioptima.com/entry'>
-                <Button size="lg" variant="outline" className="group hover:cursor-pointer">
+              {/* <a href='/sign-in'> */}
+              <a href='https://intellioptima.com/entry' className="group hover:cursor-pointer">
+                <Button size="lg" variant="outline" >
                   <span className="">Access Beta</span>
                 </Button>
               </a>

@@ -50,9 +50,12 @@ const Navbar = ({ userId }: { userId: string }) => {
               Contact
             </a>
 
-            <Link to="/sign-in" viewTransition>
+            {/* <Link to="/sign-in" viewTransition>
               <Button className="hover:cursor-pointer">Access Beta</Button>
-            </Link>
+            </Link> */}
+            <a href="https://intellioptima.com/entry">
+              <Button className="hover:cursor-pointer">Access Beta</Button>
+            </a>
 
 
           </nav>
@@ -91,6 +94,9 @@ const Navbar = ({ userId }: { userId: string }) => {
           <a href="https://intellioptima.com/entry" onClick={toggleMenu}>
             <Button className="w-full">Access Beta</Button>
           </a>
+          {/* <Link to="/sign-in" onClick={toggleMenu}>
+            <Button className="w-full">Access Beta</Button>
+          </Link> */}
         </nav>
       </div>
     </header>
