@@ -88,7 +88,7 @@ const Navbar = ({ userId }: { userId: string }) => {
           </a>
 
 
-          <a target='__blank' href="https://intellioptima.com/entry" onClick={toggleMenu}>
+          <a href="https://intellioptima.com/entry" onClick={toggleMenu}>
             <Button className="w-full">Access Beta</Button>
           </a>
         </nav>
